@@ -1,23 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+import Tasks from "./components/Tasks";
+import { useState } from "react";
+import AddEvent from "./components/AddEvent";
 
 function App() {
+  const [tasks, setTasks] = useState([
+    {
+      id: 1,
+      text: "Doctors Appoinment",
+      day: "Feb 5th at 2:30pm",
+      reminder: true,
+    },
+    {
+      id: 2,
+      text: "Meeting at School",
+      day: "Feb 6th at 1:30pm",
+      reminder: true,
+    },
+    {
+      id: 3,
+      text: "Food Shopping",
+      day: "Feb 5th at 2:30pm",
+      reminder: false,
+    },
+  ]);
+
+  //Delete Event
+  const deleteEvent = (id) => {
+    setTasks(tasks.filter((tasks) => tasks.id !== id));
+  };
+
+  //Toggle Reminder
+  const toggleReminder = (id) => {
+    setTasks(
+      tasks.map((tasks) =>
+        tasks.id === id ? { ...tasks, reminder: !tasks.reminder } : tasks
+      )
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <Header title="Task Tracker" />
+      <AddEvent />
+      {tasks.length > 0 ? (
+        <Tasks tasks={tasks} onDelete={deleteEvent} onToggle={toggleReminder} />
+      ) : (
+        "No Task to show"
+      )}
     </div>
   );
 }
